@@ -284,7 +284,6 @@ int LXTeensyDMX::nextReadSlot(void) {
 
 void LXTeensyDMX::transmitEmpty( void ) {
 	if ( _rdm_task_mode == DMX_TASK_SEND_RDM ) {
-
 		if ( _dmx_state == DMX_STATE_DATA ) {
 		  _uart_hardware->uart_reg_ptr->DATA = _rdmPacket[_next_slot++];	//send next slot
 		  if ( _next_slot >= _rdm_len ) {		//0 based index
@@ -301,7 +300,6 @@ void LXTeensyDMX::transmitEmpty( void ) {
 		  _dmx_state = DMX_STATE_DATA;
 		  _next_slot = 1;
 		}	
-		
 	} else if ( _rdm_task_mode ) {					//should be DMX_TASK_SEND even if not RDM
 		
 		if ( _dmx_state == DMX_STATE_DATA ) {
@@ -344,6 +342,7 @@ void LXTeensyDMX::transmitComplete( void ) {
 		     _dmx_read_state = DMX_READ_STATE_IDLE;		// if not after controller message, wait for a break
 		  }										// signaling start of packet
 		  _rdm_task_mode = DMX_TASK_RECEIVE;
+		  _uart_hardware->uart_reg_ptr->CTRL |= LPUART_CTRL_RIE;	
 		  
 		} else if ( _dmx_state == DMX_STATE_BREAK ) {
 		  hardware_uart_set_baud_2s(_uart_hardware->uart_reg_ptr, DMX_DATA_BAUD);
@@ -468,6 +467,7 @@ uint8_t LXTeensyDMX::rdmTaskMode( void ) {		// applies to bidirectional RDM conn
 
 void LXTeensyDMX::setTaskSendDMX( void ) {		// only valid if connection started using startRDM()
 	digitalWrite(_direction_pin, HIGH);
+	_uart_hardware->uart_reg_ptr->CTRL &= ~LPUART_CTRL_RIE;	//shut off receive interrupt...
 	 _rdm_task_mode = DMX_TASK_SEND;
 }
 
@@ -478,6 +478,7 @@ void LXTeensyDMX::restoreTaskSendDMX( void ) {		// only valid if connection star
 	_rdm_task_mode = DMX_TASK_SET_SEND;
 	 
 	 //restore the interrupts
+	 _uart_hardware->uart_reg_ptr->CTRL &= ~LPUART_CTRL_RIE;	//shut off receive interrupt...
 	_uart_hardware->uart_reg_ptr->CTRL &= ~LPUART_CTRL_TIE;		//disable tx empty interrupt
 	_uart_hardware->uart_reg_ptr->CTRL |= LPUART_CTRL_TCIE;		//enable transmission complete interrupt (end of break...)
   							
@@ -495,6 +496,7 @@ void LXTeensyDMX::setTaskReceive( void ) {		// only valid if connection started 
     
     
     digitalWrite(_direction_pin, LOW);
+    _uart_hardware->uart_reg_ptr->CTRL |= LPUART_CTRL_RIE; // enable receive interrupt
 }
 
 void LXTeensyDMX::sendRawRDMPacket( uint8_t len ) {		// only valid if connection started using startRDM()
@@ -504,7 +506,7 @@ void LXTeensyDMX::sendRawRDMPacket( uint8_t len ) {		// only valid if connection
 	_rdmPacket[_rdm_len-2] = checksum >> 8;
 	_rdmPacket[_rdm_len-1] = checksum & 0xFF;
 
-	if ( _rdm_task_mode ) {						//already sending, flag to send RDM
+	if ( _rdm_task_mode ) {						//already sending, flag to send RDM next transmit complete
 		_rdm_task_mode = DMX_TASK_SET_SEND_RDM;
 	} else {
 		_rdm_task_mode = DMX_TASK_SEND_RDM;
@@ -729,7 +731,6 @@ void LXTeensyDMX::uartISR( void ) {
   if ( status & LPUART_STAT_FE ) {					// framing error (break detect)
         _uart_hardware->uart_reg_ptr->STAT = LPUART_STAT_FE; // clear the error by writing 1 to the bit pg.2788
 		breakReceived(); 
-		
 		return;								    // do not call byteReceived if framing error
   }	
 
