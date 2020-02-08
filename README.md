@@ -18,5 +18,3 @@ TODO:  complete the following...
    LXTeensy4DMX is used with a single instance called Teensy4DMX
    
    Additional instances using UART1 and UART2 are available by using Teensy4DMX1 and Teensy4DMX2.
-   
-   LXTeensy4DMX has been tested with Teensy 3.2 and 3.6
