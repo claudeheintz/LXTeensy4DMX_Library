@@ -721,12 +721,15 @@ uint8_t LXTeensyDMX::sendRDMSetCommand(UID target, uint16_t pid, uint8_t* info, 
 }
 
 void LXTeensyDMX::uartISR( void ) {
+
   uint32_t status = _uart_hardware->uart_reg_ptr->STAT;
   uint8_t incoming_byte = _uart_hardware->uart_reg_ptr->DATA;					// read buffer to clear interrupt flag (in this order for Teensy 3.6)
   
   
   if ( status & LPUART_STAT_FE ) {					// framing error (break detect)
+        _uart_hardware->uart_reg_ptr->STAT = LPUART_STAT_FE; // clear the error by writing 1 to the bit pg.2788
 		breakReceived(); 
+		
 		return;								    // do not call byteReceived if framing error
   }	
 
