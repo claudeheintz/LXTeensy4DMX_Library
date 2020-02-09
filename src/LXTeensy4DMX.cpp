@@ -109,17 +109,17 @@ void hardware_uart_begin(uart_hardware_t* uart_hardware, uint32_t bit_rate, uint
 	// Bit 5 TXINVERT
 	if (format & 0x20) ctrl |= LPUART_CTRL_TXINV;		// tx invert
 
-	// write out computed CTRL
-	uart_hardware->uart_reg_ptr->CTRL = ctrl;
-
 	// Bit 3 10 bit - Will assume that begin already cleared it.
 	// process some other bits which change other registers.
 	if (format & 0x08) 	uart_hardware->uart_reg_ptr->BAUD |= LPUART_BAUD_M10;
 	
 	// Bit 4 RXINVERT 
 	uint32_t c = uart_hardware->uart_reg_ptr->STAT & ~LPUART_STAT_RXINV;
-	if (format & 0x10) c |= LPUART_STAT_RXINV;		// rx invert
+	if (format & 0x10) c |= LPUART_STAT_RXINV;		// rx invert should be set when receiver disabled see pg 2786
 	uart_hardware->uart_reg_ptr->STAT = c;
+	
+	// write out computed CTRL  This 
+	uart_hardware->uart_reg_ptr->CTRL = ctrl;		// may enable receiver (see rxinvert note)
 
 	// bit 8 turns on 2 stop bit mode
 	if ( format & 0x100) uart_hardware->uart_reg_ptr->BAUD |= LPUART_BAUD_SBNS;	
@@ -220,12 +220,14 @@ void LXTeensyDMX::startRDM( uint8_t pin, uint8_t direction, uint8_t invert_rx ) 
 	_direction_pin = pin;
 	if ( direction ) {
 		startOutput();							                            // enables transmit interrupt
-		_uart_hardware->uart_reg_ptr->CTRL |= LPUART_CTRL_RE;				// enable receive interrupt
 		
 		if ( invert_rx ) {
-		    uint32_t c = _uart_hardware->uart_reg_ptr->STAT | LPUART_STAT_RXINV;	//set invert rx bit
-	        _uart_hardware->uart_reg_ptr->STAT = c;
+			uint32_t c = uart_hardware->uart_reg_ptr->STAT |= LPUART_STAT_RXINV;	//This bit should only be changed when the receiver is disabled. pg 2786
+			uart_hardware->uart_reg_ptr->STAT = c;
 		}
+		
+		_uart_hardware->uart_reg_ptr->CTRL |= LPUART_CTRL_RE;				        // enable receive; interrupt (RIE) enabled separately
+		
 	} else {
 		startInput(invert_rx);
 	}
