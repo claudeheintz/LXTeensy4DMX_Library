@@ -16,4 +16,5 @@ LXTeensy4DMX is used with the following global objects:
 Teensy4DMX		uses pins 0 and 1		RX1/TX1
 Teensy4DMX1		uses pins 7 and 8		RX2/TX2
 Teensy4DMX2		uses pins 15 and 14		RX3/TX3
+Teensy4DMX3		uses pins 16 and 17		RX4/TX4
 ```
