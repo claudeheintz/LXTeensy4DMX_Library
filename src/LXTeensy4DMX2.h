@@ -24,7 +24,7 @@ extern LXTeensyDMX2 Teensy4DMX2;
 
 
 // isr function
-void lx_uart2_status_isr(void);
+void lx_uart4_status_isr(void);
 
 
 #endif //LXTeensy4DMX2_H

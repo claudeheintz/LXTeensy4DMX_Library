@@ -43,7 +43,7 @@ See bottom of this file for license.
  |                         SN 75176 A or MAX 481CPA
  V                            _______________
        |                      | 1      Vcc 8 |------(+5v)
-RX (0) |----------------------|              |                 DMX Output
+RX (0) |--[level converter]---|              |                 DMX Output
        |                 +----| 2        B 7 |---------------- Pin 2
        |                 |    |              |
    (d) |----------------------| 3 DE     A 6 |---------------- Pin 3
@@ -52,8 +52,13 @@ TX (1) |----------------------| 4 DI   Gnd 5 |---+------------ Pin 1
        |                                         |
        |                                       (GND)
 
-	Data Enable (DE) and Inverted Read Enable (!RE) can be wired to +5v for output
-	or Gnd for input if direction switching is not needed.
+	(d) which combines Data Enable (DE) and Inverted Read Enable (!RE)
+	can be wired to +5v for output or Gnd for input if direction switching is not needed.
+	
+	LXTeensy4DMX is used with the following global objects:
+	Teensy4DMX		uses pins 0 and 1		RX1/TX1
+	Teensy4DMX1		uses pins 7 and 8		RX2/TX2
+  	Teensy4DMX2		uses pins 15 and 14		RX3/TX3
 */
 
 #ifndef LXTeensy4DMX_H

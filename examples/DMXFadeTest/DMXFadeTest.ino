@@ -30,9 +30,9 @@ void setup() {
   pinMode(DIRECTION_PIN, OUTPUT);
   Teensy4DMX.setDirectionPin(DIRECTION_PIN);
   
-  Teensy4DMX.startOutput();   // uses pins 0 and 1		Universe 1
-  Teensy4DMX1.startOutput();  // uses pins 15 and 14	Universe 2
-  Teensy4DMX2.startOutput();  // uses pins 7 and 8		Universe 3
+  Teensy4DMX.startOutput();   // uses pins 0 and 1	 RX1/TX1	Universe 1
+  Teensy4DMX1.startOutput();  // uses pins 7 and 8	 RX2/TX2	Universe 3
+  Teensy4DMX2.startOutput();  // uses pins 15 and 14 RX3/TX3	Universe 2
 }
 
 /************************************************************************
