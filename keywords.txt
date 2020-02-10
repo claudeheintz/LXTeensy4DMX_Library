@@ -8,6 +8,7 @@ LXTeensyDMX			KEYWORD1
 Teensy4DMX			KEYWORD1
 Teensy4DMX1			KEYWORD1
 Teensy4DMX2			KEYWORD1
+Teensy4DMX3			KEYWORD1
 
 #######################################
 # Methods and Functions 

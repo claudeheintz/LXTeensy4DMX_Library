@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     LXTeensy4DMX2.cpp
+    @file     LXTeensy4DMX3.cpp
     @author   Claude Heintz
     @license  See LXTeensy4DMX.h or http://www.claudeheintzdesign.com/lx/opensource.html
     @copyright 2020 by Claude Heintz
@@ -14,7 +14,7 @@
 */
 /**************************************************************************/
 
-#include "LXTeensy4DMX2.h"
+#include "LXTeensy4DMX3.h"
 #include <inttypes.h>
 #include <stdlib.h>
 
@@ -23,33 +23,28 @@
  * Global Variables
 */
 
-uart_hardware_t UART4_hardware = {
-	1, IRQ_LPUART4, &lx_uart4_status_isr, &IMXRT_LPUART4,
-	CCM_CCGR1, CCM_CCGR1_LPUART4(CCM_CCGR_ON),
-	#if defined(__IMXRT1052__)   
-	{{6,2, &IOMUXC_LPUART4_RX_SELECT_INPUT, 2}, {0xff, 0xff, nullptr, 0}},
-	{{7,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}},
-	#elif defined(__IMXRT1062__)
-	{{7,2, &IOMUXC_LPUART4_RX_SELECT_INPUT, 2}, {0xff, 0xff, nullptr, 0}},
-	{{8,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}},
-	#endif
+uart_hardware_t UART3_hardware = {
+	1, IRQ_LPUART3, &lx_uart3_status_isr, &IMXRT_LPUART3,
+	CCM_CCGR0, CCM_CCGR0_LPUART3(CCM_CCGR_ON),
+	{{16,2, &IOMUXC_LPUART3_RX_SELECT_INPUT, 0}, {0xff, 0xff, nullptr, 0}},
+	{{17,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}},
 	DMX_UART_IRQ_PRIORITY,
 };
-uart_hardware_t* UART4_Hardware = &UART4_hardware;
+uart_hardware_t* UART3_Hardware = &UART3_hardware;
 
-LXTeensyDMX2 Teensy4DMX2;
+LXTeensyDMX3 Teensy4DMX3;
 
-void lx_uart4_status_isr(void)
+void lx_uart3_status_isr(void)
 {
-  Teensy4DMX2.uartISR();
+  Teensy4DMX3.uartISR();
 }
 
 
 //*****************************************************************************
 // ************************  LXTeensyDMX2 member functions  ********************
 
-LXTeensyDMX2::LXTeensyDMX2 ( void ) {
-    _uart_hardware = UART4_Hardware;
+LXTeensyDMX3::LXTeensyDMX3 ( void ) {
+    _uart_hardware = UART3_Hardware;
     
 	_direction_pin = DIRECTION_PIN_NOT_USED;	//optional
 	_slots = DMX_MAX_SLOTS;
@@ -63,6 +58,6 @@ LXTeensyDMX2::LXTeensyDMX2 ( void ) {
     }
 }
 
-LXTeensyDMX2::~LXTeensyDMX2 ( void ) {
+LXTeensyDMX3::~LXTeensyDMX3 ( void ) {
     stop();
 }

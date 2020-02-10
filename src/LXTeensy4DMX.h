@@ -90,11 +90,7 @@ typedef struct {
 		const uint32_t ccm_value;
 		pin_info_t rx_pins[COUNT_RX_PINS];
 		pin_info_t tx_pins[COUNT_TX_PINS];
-		const uint8_t cts_pin;
-		const uint8_t cts_mux_val;
 		const uint16_t irq_priority;
-		const uint16_t rts_low_watermark;
-		const uint16_t rts_high_watermark;
 	}  uart_hardware_t;
 
 /*!   
