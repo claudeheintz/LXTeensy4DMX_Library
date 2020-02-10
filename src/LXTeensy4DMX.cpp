@@ -116,7 +116,7 @@ void hardware_uart_begin(uart_hardware_t* uart_hardware, uint32_t bit_rate, uint
 	// Bit 4 RXINVERT 
 	uint32_t c = uart_hardware->uart_reg_ptr->STAT & ~LPUART_STAT_RXINV;
 	if (format & 0x10) c |= LPUART_STAT_RXINV;		// rx invert should be set when receiver disabled see pg 2786
-	uart_hardware->uart_reg_ptr->STAT = c;
+	uart_hardware->uart_reg_ptr->STAT = c;			// rx_invert probably also needs to be set before transmitter is enabled...
 	
 	// write out computed CTRL  This 
 	uart_hardware->uart_reg_ptr->CTRL = ctrl;		// may enable receiver (see rxinvert note)
@@ -169,7 +169,7 @@ LXTeensyDMX::~LXTeensyDMX ( void ) {
     stop();
 }
 
-void LXTeensyDMX::startOutput ( void ) {
+void LXTeensyDMX::startOutput ( uint8_t invert_rx  ) {
 	if ( _direction_pin != DIRECTION_PIN_NOT_USED ) {
 		digitalWrite(_direction_pin, HIGH);
 	}
@@ -177,7 +177,11 @@ void LXTeensyDMX::startOutput ( void ) {
 		stop();
 	}
 	if ( _interrupt_status == ISR_DISABLED ) {	//prevent messing up sequence if already started...
-		hardware_uart_begin(_uart_hardware, DMX_BREAK_BAUD, SERIAL_8N2, CTRL_TX_ENABLE);
+		uint32_t format = SERIAL_8N2;
+		if ( invert_rx ) {
+			format |= 0x10;   					// rx inverted signal
+		}
+		hardware_uart_begin(_uart_hardware, DMX_BREAK_BAUD, format, CTRL_TX_ENABLE);
 
 		//_shared_dmx_data = dmxData();
 		_rdm_task_mode = DMX_TASK_SEND;
@@ -219,12 +223,7 @@ void LXTeensyDMX::startRDM( uint8_t pin, uint8_t direction, uint8_t invert_rx ) 
 	pinMode(pin, OUTPUT);
 	_direction_pin = pin;
 	if ( direction ) {
-		startOutput();							                            // enables transmit interrupt
-		
-		if ( invert_rx ) {
-			uint32_t c = uart_hardware->uart_reg_ptr->STAT |= LPUART_STAT_RXINV;	//This bit should only be changed when the receiver is disabled. pg 2786
-			uart_hardware->uart_reg_ptr->STAT = c;
-		}
+		startOutput(invert_rx);							                            // enables transmit interrupt
 		
 		_uart_hardware->uart_reg_ptr->CTRL |= LPUART_CTRL_RE;				        // enable receive; interrupt (RIE) enabled separately
 		
@@ -731,7 +730,7 @@ void LXTeensyDMX::uartISR( void ) {
   
   
   if ( status & LPUART_STAT_FE ) {					// framing error (break detect)
-        _uart_hardware->uart_reg_ptr->STAT = LPUART_STAT_FE; // clear the error by writing 1 to the bit pg.2788
+        _uart_hardware->uart_reg_ptr->STAT = status | LPUART_STAT_FE; // clear the error by writing 1 to the bit pg.2788
 		breakReceived(); 
 		return;								    // do not call byteReceived if framing error
   }	

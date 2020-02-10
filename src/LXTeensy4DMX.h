@@ -121,8 +121,9 @@ class LXTeensyDMX {
     * @discussion Sets up baud rate, bits and parity, 
     *             sets globals accessed in ISR, 
     *             enables transmission (TE) and tx interrupts (TIE/TCIE).
+    *             invert_rx needed for RDM 
    */
-   void startOutput( void );
+   void startOutput( uint8_t invert_rx = 0  );
    
    /*!
     * @brief starts interrupt that continuously reads DMX data
