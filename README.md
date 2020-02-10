@@ -1,7 +1,7 @@
 # LXTeensy4DMX
 DMX Driver for Teensy 4 using Teensyduino
 
-   LXTeensy4DMX is a driver for sending [or receiving DMX --not complete] using a Teensy 4.x's UART0 RX pin 0, TX pin 1.
+   LXTeensy4DMX is a driver for sending or receiving DMX using a Teensy 4.0's UARTs.
    
    LXTeensy4DMX output mode continuously sends DMX once its interrupts have been enabled using startOutput().
    Use setSlot() to set the level value for a particular DMX dimmer/address/channel.
