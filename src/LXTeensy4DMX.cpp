@@ -453,6 +453,18 @@ void LXTeensyDMX::setDataReceivedCallback(LXRecvCallback callback) {
 	_receive_callback = callback;
 }
 
+void LXTeensyDMX::set_alt_pins(uint8_t txi, uint8_t rxi) {
+    if ( txi & ( _uart_hardware->tx_pins[UART_PIN_ALT].pin != 0xff ) ) {	//check to see if alternate is available
+        _tx_pin_index = UART_PIN_ALT;
+    } else {
+        _tx_pin_index = UART_PIN_MAIN;
+    }
+    if ( rxi & ( _uart_hardware->rx_pins[UART_PIN_ALT].pin != 0xff ) ) {	//check to see if alternate is available
+        _rx_pin_index = UART_PIN_ALT;
+    } else {
+        _rx_pin_index = UART_PIN_MAIN;
+    }
+}
 
 /************************************ RDM Methods **************************************/
 

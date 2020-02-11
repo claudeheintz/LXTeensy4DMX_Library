@@ -251,10 +251,17 @@ class LXTeensyDMX {
    */
   	void breakReceived( void );
   	
-  	/*!
+   /*!
     * @brief called from isr when a byte is read from register
    */
   	void byteReceived(uint8_t c);
+  	
+   /*!
+    * @brief select main or alternate pin by passing UART_PIN_MAIN or UART_PIN_ALT
+    *        ** alternate pins are not currently defined for any UARTs **
+   */
+  	void set_alt_pins(uint8_t txi=UART_PIN_MAIN, uint8_t rxi=UART_PIN_MAIN);
+  	
   	
 /************************************ RDM Methods ***********************************/
   	 
@@ -390,11 +397,9 @@ class LXTeensyDMX {
   	/*!
     * @brief alternate pin MUX selection index(s)
     * @discussion Default is always first item.
-    *             Could add member functions to set for selecting alternate pins.
-    *             Unused at present, pass to hardware_uart_begin, hardware_uart_end in the future.
    */
-  	uint8_t	_rx_pin_index = 0x0;	// default is always first item
-	uint8_t	_tx_pin_index = 0x0;	// could add member functions to set for selecting alternate pins
+  	uint8_t	_rx_pin_index = UART_PIN_MAIN;
+	uint8_t	_tx_pin_index = UART_PIN_MAIN;
 
   	
    /*!
