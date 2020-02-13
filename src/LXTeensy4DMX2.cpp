@@ -9,8 +9,7 @@
 
     @section  HISTORY
 
-    v1.0 - First release
-    v2.0 - abstracted UART Hardware
+    v1.0 - first release February 2020
 */
 /**************************************************************************/
 

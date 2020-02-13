@@ -571,3 +571,62 @@ void lx_uart6_status_isr(void);
  */
  
  #endif // ifndef LXTeensy4DMX_H
+ 
+/*************************** HardwareSerial reference ***************************
+see hardware/teensy/avr/cores/teensy4
+ 
+TeensySerial-IMXRT UART-LXTeensy4DMX
+1-UART6-LXTeensy4DMX
+2-UART4-LXTeensy4DMX1
+3-UART2-LXTeensy4DMX2
+4-UART3-LXTeensy4DMX3
+5-UART8-LXTeensy4DMX4
+6-UART1-LXTeensy4DMX5
+7-UART7-LXTeensy4DMX6
+
+Register Pointers
+1-&IMXRT_LPUART6
+2-&IMXRT_LPUART4
+3-&IMXRT_LPUART2
+4-&IMXRT_LPUART3
+5-&IMXRT_LPUART8
+6-&IMXRT_LPUART1
+7-&IMXRT_LPUART7
+
+IRQ number
+1-IRQ_LPUART6
+2-IRQ_LPUART4
+3-IRQ_LPUART2
+4-IRQ_LPUART3
+5-IRQ_LPUART8
+6-IRQ_LPUART1
+7-IRQ_LPUART7
+
+Clock
+1-CCM_CCGR3, CCM_CCGR3_LPUART6(CCM_CCGR_ON)
+2-CCM_CCGR1, CCM_CCGR1_LPUART4(CCM_CCGR_ON)
+3-CCM_CCGR0, CCM_CCGR0_LPUART2(CCM_CCGR_ON)
+4-CCM_CCGR0, CCM_CCGR0_LPUART3(CCM_CCGR_ON)
+5-CCM_CCGR6, CCM_CCGR6_LPUART8(CCM_CCGR_ON)
+6-CCM_CCGR5, CCM_CCGR5_LPUART1(CCM_CCGR_ON)
+7-CCM_CCGR5, CCM_CCGR5_LPUART7(CCM_CCGR_ON)
+
+RX pins
+1-{{0,2, &IOMUXC_LPUART6_RX_SELECT_INPUT, 1}, {0xff, 0xff, nullptr, 0}}
+2-{{6,2, &IOMUXC_LPUART4_RX_SELECT_INPUT, 2}, {0xff, 0xff, nullptr, 0}}
+3-{{15,2, &IOMUXC_LPUART2_RX_SELECT_INPUT, 1}, {0xff, 0xff, nullptr, 0}}
+4-{{16,2, &IOMUXC_LPUART3_RX_SELECT_INPUT, 0}, {0xff, 0xff, nullptr, 0}}
+5-{{21,2, &IOMUXC_LPUART8_RX_SELECT_INPUT, 1}, {38, 2, &IOMUXC_LPUART8_RX_SELECT_INPUT, 0}}
+6-{{25,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}}
+7-{{28,2, &IOMUXC_LPUART7_RX_SELECT_INPUT, 1}, {0xff, 0xff, nullptr, 0}}
+
+TX pins
+1-{{1,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}}
+2-{{7,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}}
+3-{{14,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}}
+4-{{17,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}}
+5-{{20,2, &IOMUXC_LPUART8_TX_SELECT_INPUT, 1}, {39, 2, &IOMUXC_LPUART8_TX_SELECT_INPUT, 0}}
+6-{{24,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}}
+7-{{29,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}}
+
+*******************************************************/

@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     LXTeensy4DMX3.cpp
+    @file     LXTeensy4DMX5.cpp
     @author   Claude Heintz
     @license  See LXTeensy4DMX.h or http://www.claudeheintzdesign.com/lx/opensource.html
     @copyright 2020 by Claude Heintz
@@ -13,7 +13,7 @@
 */
 /**************************************************************************/
 
-#include "LXTeensy4DMX3.h"
+#include "LXTeensy4DMX5.h"
 #include <inttypes.h>
 #include <stdlib.h>
 
@@ -22,28 +22,28 @@
  * Global Variables
 */
 
-uart_hardware_t UART3_hardware = {
-	1, IRQ_LPUART3, &lx_uart3_status_isr, &IMXRT_LPUART3,
-	CCM_CCGR0, CCM_CCGR0_LPUART3(CCM_CCGR_ON),
-	{{16,2, &IOMUXC_LPUART3_RX_SELECT_INPUT, 0}, {0xff, 0xff, nullptr, 0}},
-	{{17,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}},
+uart_hardware_t UART1_hardware = {
+	1, IRQ_LPUART1, &lx_uart1_status_isr, &IMXRT_LPUART1,
+	CCM_CCGR5, CCM_CCGR5_LPUART1(CCM_CCGR_ON),
+	{{25,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}},
+	{{24,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}},
 	DMX_UART_IRQ_PRIORITY,
 };
-uart_hardware_t* UART3_Hardware = &UART3_hardware;
+uart_hardware_t* UART1_Hardware = &UART1_hardware;
 
-LXTeensyDMX3 Teensy4DMX3;
+LXTeensyDMX5 Teensy4DMX5;
 
-void lx_uart3_status_isr(void)
+void lx_uart1_status_isr(void)
 {
-  Teensy4DMX3.uartISR();
+  Teensy4DMX5.uartISR();
 }
 
 
 //*****************************************************************************
 // ************************  LXTeensyDMX2 member functions  ********************
 
-LXTeensyDMX3::LXTeensyDMX3 ( void ) {
-    _uart_hardware = UART3_Hardware;
+LXTeensyDMX5::LXTeensyDMX5 ( void ) {
+    _uart_hardware = UART1_Hardware;
     
 	_direction_pin = DIRECTION_PIN_NOT_USED;	//optional
 	_slots = DMX_MAX_SLOTS;
@@ -57,6 +57,6 @@ LXTeensyDMX3::LXTeensyDMX3 ( void ) {
     }
 }
 
-LXTeensyDMX3::~LXTeensyDMX3 ( void ) {
+LXTeensyDMX5::~LXTeensyDMX5 ( void ) {
     stop();
 }

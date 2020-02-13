@@ -9,7 +9,7 @@
 
     @section  HISTORY
 
-    v1.0 - IN PROGRESS
+    v1.0 - first release February 2020
 */
 /**************************************************************************/
 
