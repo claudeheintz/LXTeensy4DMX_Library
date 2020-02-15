@@ -76,7 +76,7 @@ typedef void (*LXRecvCallback)(int);
 #define COUNT_RX_PINS 2
 typedef struct {
 		const uint8_t 		pin;		// The pin number
-		const uint32_t 		mux_val;	// Value to set for mux;
+		const uint32_t 		mux_val;	// Value to set for mux;  
 		volatile uint32_t	*select_input_register; // Which register controls the selection
 		const uint32_t		select_val;	// Value for that selection
 	} pin_info_t;
@@ -628,5 +628,17 @@ TX pins
 5-{{20,2, &IOMUXC_LPUART8_TX_SELECT_INPUT, 1}, {39, 2, &IOMUXC_LPUART8_TX_SELECT_INPUT, 0}}
 6-{{24,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}}
 7-{{29,2, nullptr, 0}, {0xff, 0xff, nullptr, 0}}
+
+ * MUX Notes
+ * See manual pg.296-297, table gives the pad and mode.
+ * Mode is set with 3bits in config register:
+ * UARTs are mostly ALT2 ( 010, 2 )
+ * seems as if GPIO is usually ALT5 (101, 5).
+ *
+ * input select register has single bit which selects between 2 or more pads for input into the UART
+ * in addition, the pin config register for the pad must also be set to ALT2 for the UART.
+ *
+ * See core_pins.h line 862 for list of hardware registers corresponding to Arduino pin numbers.
+ * Search the manual for the mux config register name to find relevant references.
 
 *******************************************************/
